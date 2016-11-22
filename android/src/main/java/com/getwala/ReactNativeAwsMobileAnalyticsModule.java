@@ -1,11 +1,14 @@
 
 package com.getwala;
 
+import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.mobileconnectors.amazonmobileanalytics.AnalyticsEvent;
 import com.amazonaws.mobileconnectors.amazonmobileanalytics.EventClient;
 import com.amazonaws.mobileconnectors.amazonmobileanalytics.InitializationException;
 import com.amazonaws.mobileconnectors.amazonmobileanalytics.MobileAnalyticsManager;
 import com.amazonaws.mobileconnectors.amazonmobileanalytics.monetization.CustomMonetizationEventBuilder;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.mobileanalytics.model.Event;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -31,9 +34,10 @@ public class ReactNativeAwsMobileAnalyticsModule extends ReactContextBaseJavaMod
     }
 
     @ReactMethod
-    public void initializeMobileAnalytics(String appId, String identityPoolId, Promise promise) {
+    public void initializeMobileAnalytics(String appId, String identityPoolId, String region, Promise promise) {
         try {
-            analytics = MobileAnalyticsManager.getOrCreateInstance(this.reactContext.getApplicationContext(), appId, identityPoolId);
+            CognitoCachingCredentialsProvider cognitoProvider = new CognitoCachingCredentialsProvider(reactContext.getApplicationContext(), identityPoolId, Regions.fromName(region));
+            analytics = MobileAnalyticsManager.getOrCreateInstance(reactContext.getApplicationContext(), appId, Regions.fromName(region), cognitoProvider);
             promise.resolve(true);
         } catch (InitializationException ie) {
             promise.reject(ie);
