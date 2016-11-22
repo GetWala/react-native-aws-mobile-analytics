@@ -1,5 +1,5 @@
 
-package com.getwala;
+package com.getwala.aws.mobileanalytics;
 
 import java.util.Arrays;
 import java.util.Collections;

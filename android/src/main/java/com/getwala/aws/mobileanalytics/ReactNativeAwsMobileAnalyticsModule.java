@@ -1,5 +1,5 @@
 
-package com.getwala;
+package com.getwala.aws.mobileanalytics;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
